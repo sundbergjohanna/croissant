@@ -19,7 +19,7 @@ app.config.update(
     CELERY_RESULT_BACKEND="redis://"
 )
 
-celery = make_celery(flask_app)
+celery = make_celery(app)
 
 @app.route('/', methods=['GET'] )
 def get_count():
