@@ -21,7 +21,7 @@ app.config.update(
 
 celery = make_celery(flask_app)
 
-@flask_app.route('/', methods=['GET'] )
+@app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
     res =result.get()
