@@ -13,8 +13,8 @@ from integrate_celery_flask import make_celery
 import pandas as pd
 import matplotlib.pyplot as plt
 
-flask_app = Flask(__name__)
-flask_app.config.update(
+app = Flask(__name__)
+app.config.update(
     CELERY_BROKER_URL="pyamqp://localhost//",
     CELERY_RESULT_BACKEND="redis://"
 )
