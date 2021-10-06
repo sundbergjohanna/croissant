@@ -15,8 +15,8 @@ import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 app.config.update(
-    CELERY_BROKER_URL="pyamqp://localhost//",
-    CELERY_RESULT_BACKEND="rabbitmq://"
+    CELERY_BROKER_URL="amqp://localhost",
+    CELERY_RESULT_BACKEND="amqp://"
 )
 
 celery = make_celery(app)
