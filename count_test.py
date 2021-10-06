@@ -13,8 +13,8 @@ from integrate_celery_flask import make_celery
 
 app = Flask(__name__)
 app.config.update(
-    CELERY_BROKER_URL="amqp://localhost",
-    CELERY_RESULT_BACKEND="amqp://"
+    CELERY_BROKER_URL="amqp://",
+    CELERY_RESULT_BACKEND="rcp://"
 )
 
 celery = make_celery(app)
@@ -22,8 +22,7 @@ celery = make_celery(app)
 @app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
-    res =result.get()
-    return jsonify(res)
+    return jsonify(result.get())
 
 # Celery tasks 
 @celery.task(name='make_celery.prounoun_counter')
