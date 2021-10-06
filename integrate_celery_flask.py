@@ -1,5 +1,7 @@
 from celery import Celery
 
+#code from https://flask.palletsprojects.com/en/2.0.x/patterns/celery/
+
 def make_celery(app):
     celery = Celery(
         app.import_name,
