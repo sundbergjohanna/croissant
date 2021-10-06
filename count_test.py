@@ -10,13 +10,11 @@ import os
 from celery import Celery
 from flask import Flask
 from integrate_celery_flask import make_celery
-import pandas as pd
-import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 app.config.update(
-    CELERY_BROKER_URL="pyamqp://localhost",
-    CELERY_RESULT_BACKEND="pyamqp://"
+    CELERY_BROKER_URL="amqp://localhost",
+    CELERY_RESULT_BACKEND="amqp://"
 )
 
 celery = make_celery(app)
