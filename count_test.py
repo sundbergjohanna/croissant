@@ -20,13 +20,13 @@ app.config.update(
 celery = make_celery(app)
 
 @app.route('/', methods=['GET'] )
-def get_count():
-    result = prounoun_counter.delay()
+def count_pronouns():
+    result = pronoun_counter.delay()
     return jsonify(result.get())
 
 # Celery tasks 
 @celery.task(name='make_celery.prounoun_counter')
-def prounoun_counter():
+def pronoun_counter():
     
     all_files = os.listdir('data')#list all files containing tweets
 
