@@ -66,9 +66,9 @@ def prounoun_counter():
         if not file == '.DS_Store':
             file_stat = file_scan('data/' + file)
         
-        for key in statistics:
-            if key in file_stat:
-                statistics[key] += file_stat[key]
+            for key in statistics:
+                if key in file_stat:
+                    statistics[key] += file_stat[key]
      
                 
     #result_file = open('result.json', 'w')
