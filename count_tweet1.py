@@ -10,6 +10,7 @@ import os
 #from celery import Celery
 from flask import Flask, jsonify
 #from task_celery import make_celery
+import matplotlib.pyplot as plt
 
 from celery import Celery
 
