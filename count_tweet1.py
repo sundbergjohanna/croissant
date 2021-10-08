@@ -43,10 +43,11 @@ celery = make_celery(flask_app)
 @flask_app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
-    keys = result.keys()
-    counts = result.values()
-    plt.bar(keys,counts)
+    print(result)
     res = result.get()
+    print(res)
+    print(res.dtypes)
+    
     return jsonify(res)
 
 
