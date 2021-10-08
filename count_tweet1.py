@@ -43,7 +43,10 @@ celery = make_celery(flask_app)
 @flask_app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
-    res =result.get()
+    keys = result.keys()
+    counts = result.values()
+    plt.bar(keys,counts)
+    res = result.get()
     return jsonify(res)
 
 
@@ -74,7 +77,8 @@ def prounoun_counter():
     #result_file = open('result.json', 'w')
     #json.dump(statistics, result_file)
     #result_file.close()
-    return json.dumps(statistics)
+    #return json.dumps(statistics)
+    return statistics
 
 def tweet_scan(tweet):
     count = dict()
