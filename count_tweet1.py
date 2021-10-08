@@ -7,12 +7,13 @@ Created on Tue Oct  5 15:35:18 2021
 """
 import json
 import os
-#from celery import Celery
-from flask import Flask, jsonify
-#from task_celery import make_celery
-import matplotlib.pyplot as plt
-
 from celery import Celery
+from flask import Flask, jsonify
+
+import matplotlib.figure as Figure
+import base64
+from io import BytesIO
+
 
 def make_celery(app):
     celery = Celery(app.import_name, backend='rpc://',
@@ -44,14 +45,19 @@ celery = make_celery(flask_app)
 @flask_app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
-    print(result)
     res = result.get()
     print(res)
+    
     keys = res.keys()
     count = res.values()
-    plt.bar(keys,count)
+    fig = Figure()
+    fig.bar(keys,count)
+    # Save it to a temporary buffer.
+    buf = BytesIO()
+    fig.savefig(buf, format="png")
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
     
-    return jsonify(res)
+    return jsonify(res) & f"<img src='data:image/png;base64,{data}'/>"
 
 
 #@celery.task(name='task_celery.prounoun_counter')
