@@ -8,17 +8,26 @@ Created on Thu Sep 30 15:06:20 2021
 import json
 import os
 from celery import Celery
-from flask import Flask
-from integrate_celery_flask import make_celery
+from flask import Flask, jsonify
+
+def make_celery(app):
+    #code from https://flask.palletsprojects.com/en/2.0.x/patterns/celery/
+    celery = Celery(app.import_name,
+                    broker='pyamqp://guest@localhost//',
+                    backend='rpc://')
+    celery.conf.update(app.config)
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
 
 app = Flask(__name__)
-app.config.update(
-    CELERY_BROKER_URL="pyamqp://",
-    CELERY_RESULT_BACKEND="rpc://"
-)
-
 celery = make_celery(app)
 
+#Flask task
 @app.route('/', methods=['GET'] )
 def count_pronouns():
     result = pronoun_counter.delay()
