@@ -46,7 +46,9 @@ def get_count():
     print(result)
     res = result.get()
     print(res)
-    print(res.dtypes)
+    keys = res.keys()
+    count = res.values()
+    plt.bar(keys,count)
     
     return jsonify(res)
 
