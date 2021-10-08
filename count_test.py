@@ -12,7 +12,8 @@ from flask import Flask, jsonify
 
 def make_celery(app):
     #code from https://flask.palletsprojects.com/en/2.0.x/patterns/celery/
-    celery = Celery(app.import_name, backend='rpc://', broker='pyamqp://guest@localhost//')
+    celery = Celery(app.import_name, backend='rpc://',
+                    broker='pyamqp://guest@localhost//')
     
     celery.conf.update(app.config)
     
