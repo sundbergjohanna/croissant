@@ -12,10 +12,10 @@ from flask import Flask, jsonify
 
 def make_celery(app):
     #code from https://flask.palletsprojects.com/en/2.0.x/patterns/celery/
-    celery = Celery(app.import_name,
-                    broker='pyamqp://guest@localhost//',
-                    backend='rpc://')
+    celery = Celery(app.import_name, backend='rpc://', broker='pyamqp://guest@localhost//')
+    
     celery.conf.update(app.config)
+    
     class ContextTask(celery.Task):
         def __call__(self, *args, **kwargs):
             with app.app_context():
