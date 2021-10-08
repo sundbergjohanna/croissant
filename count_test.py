@@ -34,7 +34,7 @@ def count_pronouns():
     return jsonify(result.get())
 
 # Celery tasks 
-@celery.task(name='make_celery.prounoun_counter')
+@celery.task(name='task_celery.prounoun_counter')
 def pronoun_counter():
     
     all_files = os.listdir('data')#list all files containing tweets
