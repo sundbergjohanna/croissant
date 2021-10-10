@@ -104,7 +104,7 @@ def file_scan(filename):
                 
                 if not tweet_obj['retweeted']:
                     pro_in_tweet = tweet_scan(tweet_obj['text'])
-                    file_statistics['total tweets'] += 1
+                    file_statistics['total'] += 1
                     
                     for key in file_statistics:
                         if key in pro_in_tweet:
