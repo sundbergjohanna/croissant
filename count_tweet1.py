@@ -10,11 +10,6 @@ import os
 from celery import Celery
 from flask import Flask, jsonify
 
-import matplotlib.figure as Figure
-import base64
-from io import BytesIO
-
-
 def make_celery(app):
     celery = Celery(app.import_name, backend='rpc://',
                     broker='pyamqp://guest@localhost//')
