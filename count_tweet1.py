@@ -9,22 +9,30 @@ import json
 import os
 from celery import Celery
 from flask import Flask, jsonify
+from integrate_celery_flask import make_celery
 
-def make_celery(app):
-    celery = Celery(app.import_name, backend='rpc://',
-                    broker='pyamqp://guest@localhost//')
-    celery.conf.update(app.config)
-
-    class ContextTask(celery.Task):
-        def __call__(self, *args, **kwargs):
-            with app.app_context():
-                return self.run(*args, **kwargs)
-
-    celery.Task = ContextTask
-    return celery
+#def make_celery(app):
+#    celery = Celery(app.import_name, backend='rpc://',
+#                    broker='pyamqp://guest@localhost//')
+#    celery.conf.update(app.config)
+#
+#    class ContextTask(celery.Task):
+#        def __call__(self, *args, **kwargs):
+#            with app.app_context():
+#                return self.run(*args, **kwargs)
+#
+#    celery.Task = ContextTask
+#    return celery
 
 flask_app = Flask(__name__)
+flask_app.config.update(
+    CELERY_BROKER_URL= 'pyamqp://guest@localhost//',
+    CELERY_RESULT_BACKEND= 'rpc://')
+
 celery = make_celery(flask_app)
+
+#flask_app = Flask(__name__)
+#celery = make_celery(flask_app)
 #app = Celery('celery_tweet', broker='pyamqp://guest@localhost//')
 
 #flask_app = Flask(__name__)
