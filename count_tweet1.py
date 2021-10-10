@@ -39,15 +39,13 @@ celery = make_celery(flask_app)
 # Flask methods
 @flask_app.route('/', methods=['GET'] )
 def get_count():
-    result = prounoun_counter.delay()
-    keys = res.keys()
-    count = res.values()
+    result = pronoun_counter.delay()
     return jsonify(result.get())
 
 
 #@celery.task(name='task_celery.prounoun_counter')
-@celery.task(name='make_celery.prounoun_counter')
-def prounoun_counter():
+@celery.task(name='make_celery.pronoun_counter')
+def pronoun_counter():
     all_files = os.listdir('data')#list all files containing tweets
 
     statistics = {'han': 0,
@@ -95,7 +93,7 @@ def file_scan(filename):
                     'denna': 0,
                     'denne': 0,
                     'hen': 0,
-                    'total tweets': 0}
+                    'total': 0}
     
     with open(filename) as file:
     
