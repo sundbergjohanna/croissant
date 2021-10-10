@@ -27,7 +27,7 @@ from integrate_celery_flask import make_celery
 flask_app = Flask(__name__)
 flask_app.config.update(
     CELERY_BROKER_URL= 'pyamqp://guest@localhost//',
-    CELERY_RESULT_BACKEND= 'rpc://')
+    result_backend = 'rpc://')
 
 celery = make_celery(flask_app)
 
