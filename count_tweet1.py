@@ -45,19 +45,9 @@ celery = make_celery(flask_app)
 @flask_app.route('/', methods=['GET'] )
 def get_count():
     result = prounoun_counter.delay()
-    res = result.get()
-    print(res)
-    
     keys = res.keys()
     count = res.values()
-    fig = Figure()
-    fig.bar(keys,count)
-    # Save it to a temporary buffer.
-    buf = BytesIO()
-    fig.savefig(buf, format="png")
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    
-    return jsonify(res) & f"<img src='data:image/png;base64,{data}'/>"
+    return jsonify(result.get())
 
 
 #@celery.task(name='task_celery.prounoun_counter')
@@ -72,7 +62,7 @@ def prounoun_counter():
                   'denna': 0,
                   'denne': 0,
                   'hen': 0,
-                  'total tweets': 0}
+                  'total': 0}
     
     for file in all_files:
         #print(file)
