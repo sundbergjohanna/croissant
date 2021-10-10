@@ -97,7 +97,7 @@ def file_scan(filename):
                     pro_in_tweet = tweet_scan(tweet_obj['text'])
                     file_statistics['total'] += 1
                     
-                    for key in file_statistics:
+                    for key in pro_in_tweet:
                         file_statistics[key] += pro_in_tweet[key]
                             
     return file_statistics
