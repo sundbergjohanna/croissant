@@ -57,8 +57,7 @@ def pronoun_counter():
         if not file == '.DS_Store':
             file_stat = file_scan('data/' + file)
             for key in statistics:
-                if key in file_stat:
-                    statistics[key] += file_stat[key]
+                statistics[key] += file_stat[key]
      
                 
     #result_file = open('result.json', 'w')
@@ -99,8 +98,7 @@ def file_scan(filename):
                     file_statistics['total'] += 1
                     
                     for key in file_statistics:
-                        if key in pro_in_tweet:
-                            file_statistics[key] += pro_in_tweet[key]
+                        file_statistics[key] += pro_in_tweet[key]
                             
     return file_statistics
 
