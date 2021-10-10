@@ -9,40 +9,23 @@ import json
 import os
 from celery import Celery
 from flask import Flask, jsonify
-from integrate_celery_flask import make_celery
 
-#def make_celery(app):
-#    celery = Celery(app.import_name, backend='rpc://',
-#                    broker='pyamqp://guest@localhost//')
-#    celery.conf.update(app.config)
-#
-#    class ContextTask(celery.Task):
-#        def __call__(self, *args, **kwargs):
-#            with app.app_context():
-#                return self.run(*args, **kwargs)
-#
-#    celery.Task = ContextTask
-#    return celery
+def make_celery(app):
+    #from https://flask.palletsprojects.com/en/2.0.x/patterns/celery/
+    celery = Celery(app.import_name, backend='rpc://',
+                    broker='pyamqp://guest@localhost//')
+    celery.conf.update(app.config)
+
+    class ContextTask(celery.Task):
+        def __call__(self, *args, **kwargs):
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery.Task = ContextTask
+    return celery
 
 flask_app = Flask(__name__)
-flask_app.config.update(
-    CELERY_BROKER_URL= 'pyamqp://guest@localhost//',
-    result_backend = 'rpc://')
-
 celery = make_celery(flask_app)
-
-#flask_app = Flask(__name__)
-#celery = make_celery(flask_app)
-#app = Celery('celery_tweet', broker='pyamqp://guest@localhost//')
-
-#flask_app = Flask(__name__)
-#flask_app.config.update(
-#    #CELERY_BROKER_URL="pyamqp://localhost//",
-#    #CELERY_RESULT_BACKEND="rabbitmq://"
-#    CELERY_BROKER_URL=os.environ.get("CELERY_BROKER_URL"),
-#    CELERY_BACKEND_URL=os.environ.get("CELERY_BACKEND_URL"),
-#)
-#celery = make_celery(flask_app)
 
 # Flask methods
 @flask_app.route('/', methods=['GET'] )
@@ -54,8 +37,10 @@ def get_count():
 #@celery.task(name='task_celery.prounoun_counter')
 @celery.task(name='make_celery.pronoun_counter')
 def pronoun_counter():
-    all_files = os.listdir('data')#list all files containing tweets
+    #list all files containing tweets
+    all_files = os.listdir('data')
 
+    #dict for statistics
     statistics = {'han': 0,
                   'hon': 0,
                   'den': 0,
@@ -65,11 +50,12 @@ def pronoun_counter():
                   'hen': 0,
                   'total': 0}
     
+    #iterate ovr each file
     for file in all_files:
         #print(file)
+        #.DS_Store file comes from my computer
         if not file == '.DS_Store':
             file_stat = file_scan('data/' + file)
-        
             for key in statistics:
                 if key in file_stat:
                     statistics[key] += file_stat[key]
@@ -78,7 +64,6 @@ def pronoun_counter():
     #result_file = open('result.json', 'w')
     #json.dump(statistics, result_file)
     #result_file.close()
-    #return json.dumps(statistics)
     return statistics
 
 def tweet_scan(tweet):
@@ -88,7 +73,6 @@ def tweet_scan(tweet):
     t = tweet.split(' ')
     for p in pronoun:
         count[p] = t.count(p)
-
     return count
 
 
