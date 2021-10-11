@@ -7,7 +7,7 @@ Created on Tue Oct  5 15:35:18 2021
 import json
 import os
 from celery import Celery
-from flask import Flask, jsonify
+from flask import Flask, jsonify, Response
 
 #Matplotlib things
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
