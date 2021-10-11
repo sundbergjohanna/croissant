@@ -51,14 +51,13 @@ def get_count_norm():
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
     
-    return Response(output.getvalue(), mimetype='image/png'), jsonify(norm)
+    return Response(output.getvalue(), mimetype='image/png')
 
 @flask_app.route('/result', methods=['GET'] )
 def get_count():
     res = pronoun_counter.delay()
     result = res.get()
     return jsonify(result)
-
 
 #Celery task normalized result
 @celery.task(name='make_celery.pronoun_counter')
