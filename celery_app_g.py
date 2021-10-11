@@ -144,8 +144,8 @@ def create_figure(key, vals):
 
     ax.bar(key, vals, color = "#304C89")
 
-    plt.xticks(rotation = 30, size = 5)
-    plt.ylabel("Occurence", size = 5)
+    plt.xticks(rotation = 30, size = 15)
+    plt.ylabel("Occurence", size = 15)
 
     return fig
 
