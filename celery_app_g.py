@@ -9,14 +9,12 @@ import os
 from celery import Celery
 from flask import Flask, jsonify, Response
 
-#Matplotlib things
+#Matplotlib + IO to plot the requirements
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-
-#other requirements
 import io
 
 def make_celery(app):
@@ -52,9 +50,8 @@ def get_count_norm():
     fig = create_figure(keys, count)
     output = io.BytesIO()
     FigureCanvas(fig).print_png(output)
-    return Response(output.getvalue(), mimetype='image/png')
-        
-    return jsonify(norm)
+    
+    return Response(output.getvalue(), mimetype='image/png'), jsonify(norm)
 
 @flask_app.route('/result', methods=['GET'] )
 def get_count():
