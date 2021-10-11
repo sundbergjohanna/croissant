@@ -10,6 +10,8 @@ from celery import Celery
 from flask import Flask, jsonify, Response
 
 #Matplotlib + IO to plot the requirements
+#All plot related code from:
+#https://towardsdatascience.com/how-to-easily-show-your-matplotlib-plots-and-pandas-dataframes-dynamically-on-your-website-a9613eff7ae3
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib
