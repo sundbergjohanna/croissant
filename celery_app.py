@@ -29,7 +29,7 @@ celery = make_celery(flask_app)
 
 # Flask methods
 @flask_app.route('/norm', methods=['GET'] )
-def get_count():
+def get_count_norm():
     res = pronoun_counter.delay()
     result = res.get()
     total = result['total']
