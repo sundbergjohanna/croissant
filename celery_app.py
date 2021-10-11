@@ -47,9 +47,11 @@ def get_count():
 
 
 #Celery task normalized result
-
 @celery.task(name='make_celery.pronoun_counter')
 def pronoun_counter():
+    #analyzes a folder of files containing txt files containing multiple tweet json objects
+    #returns pronoun statistics for the all files including number of tweets analyzed
+    
     all_files = os.listdir('data')#list all files containing tweets
 
     statistics = {'han': 0,
@@ -61,12 +63,15 @@ def pronoun_counter():
                   'hen': 0,
                   'total': 0}
 
-    
+    #iterate thru files
     for file in all_files:
         print(file)
+        #disregard 'secret file' .DS_Store from my computer
         if not file == '.DS_Store':
+            #analyze file and save file statistics
             file_stat = file_scan('data/' + file)
-        
+            
+            #add file statistics to overall statistics
             for key in statistics:
                     statistics[key] += file_stat[key]
                 
@@ -77,10 +82,12 @@ def pronoun_counter():
     return statistics
 
 def tweet_scan(tweet):
+    #takes one tweet as a string and counts occurence of each pronoun
     count = dict()
     pronoun = ['han', 'hon', 'den', 'det', 'denna', 'denne', 'hen']
     
     t = tweet.split(' ')
+    #counting pronouns in tweet
     for p in pronoun:
         count[p] = t.count(p)
 
@@ -88,7 +95,8 @@ def tweet_scan(tweet):
 
 
 def file_scan(filename):
-    
+    #takes a txt file containing json tweet objects and counts occurence of pronouns
+    #returns pronoun statistics for the file and number of tewwts analyzed
     file_statistics = {'han': 0,
                     'hon': 0,
                     'den': 0,
@@ -105,10 +113,13 @@ def file_scan(filename):
             if not line.strip() == '':            
                 tweet_obj = json.loads(line)
                 
+                #disregards retweets
                 if not tweet_obj['retweeted']:
+                    #count for pronouns in each tweet
                     pro_in_tweet = tweet_scan(tweet_obj['text'])
+                    #count total number of tweets
                     file_statistics['total'] += 1
-                    
+                    #add current tweet count to statistics
                     for key in pro_in_tweet:
                         file_statistics[key] += pro_in_tweet[key]
                             
