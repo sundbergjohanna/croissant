@@ -55,8 +55,8 @@ def pronoun_counter():
         if not file == '.DS_Store':
             file_stat, total_tweets = file_scan('data/' + file, total_tweets)
         
-        for key in statistics:
-                statistics[key] += file_stat[key]
+            for key in statistics:
+                    statistics[key] += file_stat[key]
      
     #Normalize
     norm = statistics
