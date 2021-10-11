@@ -30,8 +30,10 @@ celery = make_celery(flask_app)
 # Flask methods
 @flask_app.route('/', methods=['GET'] )
 def get_count():
-    result = pronoun_counter.delay()
-    return jsonify(result.get())
+    norm_res, res = pronoun_counter.delay()
+    result = res.get()
+    norm_result = norm_res.get()
+    return jsonify(result), jsonify(norm_result)
 
 
 #@celery.task(name='task_celery.prounoun_counter')
@@ -66,7 +68,7 @@ def prounoun_counter():
     #json.dump(statistics, result_file)
     #result_file.close()
     #return json.dumps(statistics)
-    return norm
+    return norm, statistics
 
 def tweet_scan(tweet):
     count = dict()
