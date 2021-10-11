@@ -38,7 +38,7 @@ def get_count():
 
 #@celery.task(name='task_celery.prounoun_counter')
 @celery.task(name='make_celery.pronoun_counter')
-def prounoun_counter():
+def pronoun_counter():
     all_files = os.listdir('data')#list all files containing tweets
 
     statistics = {'han': 0,
