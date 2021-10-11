@@ -32,11 +32,10 @@ celery = make_celery(flask_app)
 def get_count_norm():
     res = pronoun_counter.delay()
     result = res.get()
-    total = result['total']
     norm = result.copy()
     norm.pop('total')
     for key in result:
-        norm[key] = norm[key]/total
+        norm[key] = result[key]/result['total']
         
     return jsonify(norm_result)
 
