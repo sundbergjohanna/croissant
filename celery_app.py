@@ -36,34 +36,37 @@ def get_count():
 
 #@celery.task(name='task_celery.prounoun_counter')
 @celery.task(name='make_celery.pronoun_counter')
-def pronoun_counter():
-    #list all files containing tweets
-    all_files = os.listdir('data')
+def prounoun_counter():
+    all_files = os.listdir('data')#list all files containing tweets
 
-    #dict for statistics
     statistics = {'han': 0,
                   'hon': 0,
                   'den': 0,
                   'det': 0,
                   'denna': 0,
                   'denne': 0,
-                  'hen': 0,
-                  'total': 0}
+                  'hen': 0}
     
-    #iterate ovr each file
+    total_tweets = 0
+    
     for file in all_files:
-        #print(file)
-        #.DS_Store file comes from my computer
+        print(file)
         if not file == '.DS_Store':
-            file_stat = file_scan('data/' + file)
-            for key in statistics:
+            file_stat, total_tweets = file_scan('data/' + file, total_tweets)
+        
+        for key in statistics:
                 statistics[key] += file_stat[key]
      
+    #Normalize
+    norm = statistics
+    for key in statistics:
+        norm[key] = statistics[key]/total_tweets
                 
     #result_file = open('result.json', 'w')
     #json.dump(statistics, result_file)
     #result_file.close()
-    return statistics
+    #return json.dumps(statistics)
+    return norm
 
 def tweet_scan(tweet):
     count = dict()
@@ -72,10 +75,11 @@ def tweet_scan(tweet):
     t = tweet.split(' ')
     for p in pronoun:
         count[p] = t.count(p)
+
     return count
 
 
-def file_scan(filename):
+def file_scan(filename, total):
     
     file_statistics = {'han': 0,
                     'hon': 0,
@@ -83,8 +87,7 @@ def file_scan(filename):
                     'det': 0,
                     'denna': 0,
                     'denne': 0,
-                    'hen': 0,
-                    'total': 0}
+                    'hen': 0}
     
     with open(filename) as file:
     
@@ -95,12 +98,12 @@ def file_scan(filename):
                 
                 if not tweet_obj['retweeted']:
                     pro_in_tweet = tweet_scan(tweet_obj['text'])
-                    file_statistics['total'] += 1
+                    total += 1
                     
                     for key in pro_in_tweet:
                         file_statistics[key] += pro_in_tweet[key]
                             
-    return file_statistics
+    return file_statistics, total
 
 if __name__ == '__main__':
     flask_app.run(host='0.0.0.0',debug=True)
