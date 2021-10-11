@@ -46,8 +46,8 @@ def get_count_norm():
     for key in result:
         norm[key] = result[key]/result['total']
     
-    keys = stats.keys()
-    count = stats.values()
+    keys = norm.keys()
+    count = norm.values()
     
     fig = create_figure(keys, count)
     output = io.BytesIO()
