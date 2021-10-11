@@ -146,7 +146,7 @@ def create_figure(key, vals):
     fig, ax = plt.subplots(figsize = (6,4))
     fig.patch.set_facecolor('#E8E5DA')
 
-    ax.bar(keys, vals, color = "#304C89")
+    ax.bar(key, vals, color = "#304C89")
 
     plt.xticks(rotation = 30, size = 5)
     plt.ylabel("Occurence", size = 5)
