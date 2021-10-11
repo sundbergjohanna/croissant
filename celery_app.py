@@ -30,14 +30,20 @@ celery = make_celery(flask_app)
 # Flask methods
 @flask_app.route('/norm', methods=['GET'] )
 def get_count():
-    norm_res = pronoun_counter.delay()
+    norm_res = pronoun_counter_norm.delay()
     norm_result = norm_res.get()
     return jsonify(norm_result)
 
+@flask_app.route('/result', methods=['GET'] )
+def get_count():
+    res = pronoun_counter.delay()
+    result = res.get()
+    return jsonify(result)
 
-#@celery.task(name='task_celery.prounoun_counter')
-@celery.task(name='make_celery.pronoun_counter')
-def pronoun_counter():
+
+#Celery task normalized result
+@celery.task(name='make_celery.pronoun_counter_norm')
+def pronoun_counter_norm():
     all_files = os.listdir('data')#list all files containing tweets
 
     statistics = {'han': 0,
@@ -62,12 +68,36 @@ def pronoun_counter():
     norm = statistics
     for key in statistics:
         norm[key] = statistics[key]/total_tweets
+        
+    return norm
+
+@celery.task(name='make_celery.pronoun_counter')
+def pronoun_counter():
+    all_files = os.listdir('data')#list all files containing tweets
+
+    statistics = {'han': 0,
+                  'hon': 0,
+                  'den': 0,
+                  'det': 0,
+                  'denna': 0,
+                  'denne': 0,
+                  'hen': 0}
+    
+    total_tweets = 0
+    
+    for file in all_files:
+        print(file)
+        if not file == '.DS_Store':
+            file_stat, total_tweets = file_scan('data/' + file, total_tweets)
+        
+            for key in statistics:
+                    statistics[key] += file_stat[key]
                 
     #result_file = open('result.json', 'w')
     #json.dump(statistics, result_file)
     #result_file.close()
     #return json.dumps(statistics)
-    return norm
+    return statistics
 
 def tweet_scan(tweet):
     count = dict()
