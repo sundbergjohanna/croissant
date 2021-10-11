@@ -37,7 +37,7 @@ def get_count_norm():
     for key in result:
         norm[key] = result[key]/result['total']
         
-    return jsonify(norm_result)
+    return jsonify(norm)
 
 @flask_app.route('/result', methods=['GET'] )
 def get_count():
