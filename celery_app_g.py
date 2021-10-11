@@ -139,7 +139,7 @@ def file_scan(filename):
     return file_statistics
   
 def create_figure(key, vals):
-    fig, ax = plt.subplots(figsize = (6,4))
+    fig, ax = plt.subplots(figsize = (7,5))
     fig.patch.set_facecolor('#E8E5DA')
 
     ax.bar(key, vals, color = "#304C89")
